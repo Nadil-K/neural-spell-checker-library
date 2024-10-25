@@ -1,6 +1,6 @@
 from ModelEnum import ModelEnum
 from InvalidModelException import InvalidModelException
-
+from EvaluateModelException import EvaluateModelException
 
 class NeuralSpellChecker:
 
@@ -12,14 +12,17 @@ class NeuralSpellChecker:
             raise InvalidModelException(f"Invalid model: {model}") from None
 
         modelClass = ModelEnum.getModelClass(modelEnum)
-        modelClassInstance = modelClass(from_pretrained)
+        self.modelClassInstance = modelClassInstance = modelClass(from_pretrained)
 
         self.model = modelClassInstance.model
         self.tokenizer = modelClassInstance.tokenizer
 
-    def check(self, text):
-        # TODO: Implement the spell checking
-        pass
+    def evaluate(self, text=None, src=None):
+
+        if text is None and src is None:
+            raise EvaluateModelException("Either text or src is required") from None
+        else:
+            self.modelClassInstance.evaluate(text, src)
 
 
 
